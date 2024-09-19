@@ -1,0 +1,2 @@
+username = ROOT
+PASSWORD = P@ssw0rd
