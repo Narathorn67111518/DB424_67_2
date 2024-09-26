@@ -4,7 +4,7 @@ $username = 'root';
 $passwoed = 'P@ssw0rd';
 $db = 'northwind';
 $conn = new mysqli($server, $username , $passwoed , $db);
-if ($conn->connect_error) {
+if ($conn->connect_errno) {
     die($conn->connect_error);
 }
 ?>
