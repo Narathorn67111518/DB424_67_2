@@ -1,0 +1,71 @@
+1. เตรียมฐานข้อมูล MySQL
+
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(100) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+2. สร้างไฟล์เชื่อมต่อฐานข้อมูล (db.php)
+<?php
+$host = 'db403-mysql';
+$user = 'root';
+$password = 'P@ssw0rd';
+$dbname = 'DPU1';
+
+// สร้างการเชื่อมต่อ MySQLi
+$conn = new mysqli($host, $user, $password, $dbname);
+
+// ตรวจสอบการเชื่อมต่อ
+if ($conn->connect_errno) {
+    die("Connection failed: " . $conn->connect_error);
+}
+?>
+
+3. ลงทะเบียน (sign up)
+Form HTML (signup.html):
+<form action="signup.php" method="POST">
+    <input type="text" name="username" placeholder="Username" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="password" name="password" placeholder="Password" required>
+    <button type="submit" name="signup">Sign Up</button>
+</form>
+
+
+
+
+
+ระบบเข้าสู่รหัสผ่านแบบเช็ค รหัสนักศึกษา
+<?php
+require 'db.php'; // คือใช้ไว้ดึงข้อมูลจากข้อมูลที่ต้องการดึงมา
+
+if (isset($_POST['signup'])) { //isset คือเช็คว่ามีความสั่ง post มั้ย
+    $username = $_POST['username'];     
+    $password = password_hash($_POST['password'], PASSWORD_DEFAULT); // เข้ารหัสรหัสผ่าน
+try {
+    $sql = "SELECT  studentID 
+            FROM student 
+            WHERE studentID=?";
+            $stmt = $conn->prepare($sql);
+            $stmt->bind_param("s", $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows > 0) { 
+            $sql = "INSERT INTO users (username, password) VALUES (?, ?)"; //เรียงตามลำดับที่สร้าง คืออะไรที่มาจากข้างนอกไว้ใจไม่ได้ให้ใส่ ?
+            $stmt = $conn->prepare($sql); 
+            $stmt->bind_param("ss", $username, $password); //เรียกใช้ stmt ส่งข้อมูล เป็นไปตามข้อมูลที่ต้องการ
+            $stmt->execute();  // 
+            echo 'Success';  
+    }
+  else {
+    echo 'Student ID not found.';
+    }
+}
+catch (Exception $e) {
+    echo $e->getMessage();
+    }    
+}    
+        
+?>
