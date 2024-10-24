@@ -8,7 +8,7 @@ try {
     $sql = "SELECT  studentID  
             FROM student 
             WHERE studentID=?";
-            $stmt = $conn->prepare($sql);
+            $stmt = $conn->prepare($sql); 
             $stmt->bind_param("s", $username);
             $stmt->execute();
             $result = $stmt->get_result();

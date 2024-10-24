@@ -1,2 +1,2 @@
-username = ROOT
+USERNAME = root
 PASSWORD = P@ssw0rd
