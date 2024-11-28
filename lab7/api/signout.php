@@ -1,6 +1,6 @@
 <?php
 session_start();
 unset($_SESSION['user']);
-header('location: singin.html');
+header('location: signin.html');
 exit();
 ?>
